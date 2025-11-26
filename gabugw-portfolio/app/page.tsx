@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 
+
 const HomePage = () => {
   const Character = () => {
     const [pos, setPos] = useState({ x: 0, y: 0 });
-    const [pupil, setPupil] = useState({ x: 0, y: 0 }); // smoother animated value
+    const [pupil, setPupil] = useState({ x: 0, y: 0 }); 
     const [size, setSize] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
@@ -25,8 +26,7 @@ const HomePage = () => {
         const targetX = (pos.x / size.width - 0.5) * 15;
         const targetY = (pos.y / size.height - 0.5) * 15;
 
-        const t = 0.1; // smoothing factor
-
+        const t = 0.1; 
         setPupil((prev) => ({
           x: prev.x + (targetX - prev.x) * t,
           y: prev.y + (targetY - prev.y) * t,
