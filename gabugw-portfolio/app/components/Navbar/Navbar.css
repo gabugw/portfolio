@@ -35,20 +35,22 @@
 
 .hamburger {
   width: 24px;
-  height: 2px;
+  height: 3px;
   background: #fff67e;
   transition: 0.3s ease;
 }
 
 /* Hamburger animation */
 .mobile-toggle.active .hamburger:nth-child(1) {
-  transform: rotate(45deg) translateY(8px);
+  transform-origin: center;
+  transform: rotate(45deg) translateY(10px);
 }
 .mobile-toggle.active .hamburger:nth-child(2) {
   opacity: 0;
 }
 .mobile-toggle.active .hamburger:nth-child(3) {
-  transform: rotate(-45deg) translateY(-8px);
+  transform-origin: center;
+  transform: rotate(-45deg) translateY(-10px);
 }
 
 .nav-menu {
@@ -78,6 +80,7 @@
 
   .nav-menu {
     position: absolute;
+    display: flex;
     top: 100%;
     left: 0;
     right: 0;
@@ -92,6 +95,13 @@
     transform: translateY(-10px); /* slight slide-up */
     transition: max-height 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
     pointer-events: auto;
+    align-items: center;
+    box-shadow: 0 8px 8px rgba(5, 3, 47, 0.4);
+  }
+
+  .nav-menu a {
+    padding: 0.5rem 2rem;
+    justify-self: flex-end;
   }
 
   .nav-menu.active {

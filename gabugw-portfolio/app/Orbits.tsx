@@ -15,8 +15,21 @@ function createNodes(width: number, height: number) {
   return ["A", "B", "C", "D", "E"].map((label, i) => {
     // quasi-random sequence using golden ratio
     const t = (i + Math.random()) / NODE_COUNT; // 0–1 but shuffled each render
-    const xNorm = (t * PHI) % 1; // wraps with golden spacing
-    const yNorm = (t * PHI * PHI) % 1;
+    let xNorm = (t * PHI) % 1;
+    let yNorm = (t * PHI * PHI) % 1;
+
+    // bias upward
+    yNorm = Math.pow(yNorm, 1.5);
+
+    // bias outward from center
+    const cx = 0.5,
+      cy = 0.5;
+    xNorm = cx + (xNorm - cx) * 1.3;
+    yNorm = cy + (yNorm - cy) * 1.3;
+
+    // clamp to [0,1]
+    xNorm = Math.min(Math.max(xNorm, 0), 1);
+    yNorm = Math.min(Math.max(yNorm, 0), 1);
 
     const padding = 80;
     const x = padding + xNorm * (width - 2 * padding);
@@ -255,7 +268,7 @@ const Orbits: NextPage = () => {
     <div className="w-full h-screen flex flex-col overflow-hidden">
       <div
         ref={containerRef}
-        className="relative h-full w-full cursor-grab overflow-hidden select-none"
+        className="relative h-full w-full overflow-hidden select-none"
       >
         {/* SVG for gravity lines */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">

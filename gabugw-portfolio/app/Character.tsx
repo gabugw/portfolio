@@ -83,12 +83,12 @@ const Character = () => {
             <Orbits />
             <div className="nameplate">
               <b className="gabrielllaUgwonali">
-                GABRIELLLA
+                <span className="text-100xl">GABRIELLA</span>
                 <br />
                 UGWONALI
               </b>
               <div className="gabReeElUhOoGwuhNoLee">
-                /gab-ree-el-uh OO-gwuh-no-lee/
+                /gab-ree-El-uh OO-gwuh-NAH-lee/
               </div>
             </div>
           </div>

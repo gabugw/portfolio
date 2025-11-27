@@ -17,6 +17,7 @@
   flex-shrink: 0;
   z-index: 11;
   margin: 0.5rem;
+  text-align: left;
 }
 .nameplate {
   position: absolute;
@@ -35,13 +36,13 @@
 
 @media (max-width: 768px) {
   .nameplate {
-    transform: scale(0.75);
+    transform: scale(0.75) translateY(-20px);
   }
 }
 
 @media (max-width: 500px) {
   .nameplate {
-    transform: scale(0.6);
+    transform: scale(0.6) translateY(-40px);
     left: 10px;
   }
 }
