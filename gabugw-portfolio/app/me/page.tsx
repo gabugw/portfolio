@@ -1,5 +1,5 @@
 "use client";
-import AboutMe from "./AboutMe"; // If you split it; else directly export in page.tsx
+import AboutMe from "../Orbits"; // If you split it; else directly export in page.tsx
 
 export default function MePage() {
   return (

@@ -17,7 +17,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Gabriella Ugwonali's Portfolio",
   description: "The portfolio website of Gabriella Ugwonali.",
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  colorScheme: "dark",
 };
 
 export default function RootLayout({

@@ -40,12 +40,14 @@ export default function Navbar() {
 
         <ul ref={menuRef} className={`nav-menu ${open ? "active" : ""}`}>
           <li>{/* <a href="#home">Home</a> */}</li>
-          <li>{/* <a href="#team">Tech</a> */}</li>
           <li>
-            <a href="#overview">Creative</a>
+            <Link href="/me">TECH</Link>
           </li>
           <li>
-            <Link href="/me">Me</Link>
+            <Link href="/me">CREATIVE</Link>
+          </li>
+          <li>
+            <Link href="/me">ME</Link>
           </li>
           <li>{/* <a href="#video">Video</a> */}</li>
         </ul>

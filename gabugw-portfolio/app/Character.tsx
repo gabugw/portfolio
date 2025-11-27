@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import "./Character.css";
+import Orbits from "./Orbits";
 
 const Character = () => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -61,12 +62,13 @@ const Character = () => {
     >
       {characterLoaded && eyesLoaded && (
         <div style={{ pointerEvents: "auto" }}>
-          <div className="absolute left-0 bottom-0 w-[115vw] h-[115vh]">
+          <div className="absolute left-0 top-0 w-screen h-screen">
             <img
               src={characterImg}
               alt="Character"
               onLoad={() => setCharacterLoaded(true)}
               className="absolute inset-0 w-full h-full object-cover z-10"
+              style={{ pointerEvents: "none" }}
             />
 
             <img
@@ -78,6 +80,7 @@ const Character = () => {
               }}
               alt="Pupils"
             />
+            <Orbits />
             <div className="nameplate">
               <b className="gabrielllaUgwonali">
                 GABRIELLLA

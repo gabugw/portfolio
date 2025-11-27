@@ -1,66 +1,47 @@
 import type { NextPage } from "next";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-const DEFAULT_NODES = [
-  {
-    id: 1,
-    x: 200,
-    y: 200,
-    vx: 0,
-    vy: 0,
-    label: "A",
-    mass: 1,
-    color: "#C5DAC4",
-  },
-  {
-    id: 2,
-    x: 500,
-    y: 300,
-    vx: 0,
-    vy: 0,
-    label: "B",
-    mass: 1,
-    color: "#B1B824",
-  },
-  {
-    id: 3,
-    x: 350,
-    y: 450,
-    vx: 0,
-    vy: 0,
-    label: "C",
-    mass: 2,
-    color: "#FFE799",
-  },
-  {
-    id: 4,
-    x: 400,
-    y: 600,
-    vx: 1,
-    vy: 0,
-    label: "D",
-    mass: 40,
-    color: "#2D485E",
-  },
-
-  {
-    id: 5,
-    x: 1000,
-    y: 0,
-    vx: 2,
-    vy: 0,
-    label: "E",
-    mass: 100,
-    color: "#FF326C",
-  },
+const PHI = 1.618;
+const NODE_COUNT = 5;
+const massScale = [
+  1, // base
+  PHI, // 1.618
+  PHI * PHI, // ≈ 2.618
+  PHI ** 3, // ≈ 4.236
+  PHI ** 4, // ≈ 6.854
 ];
+
+function createNodes(width: number, height: number) {
+  return ["A", "B", "C", "D", "E"].map((label, i) => {
+    // quasi-random sequence using golden ratio
+    const t = (i + Math.random()) / NODE_COUNT; // 0–1 but shuffled each render
+    const xNorm = (t * PHI) % 1; // wraps with golden spacing
+    const yNorm = (t * PHI * PHI) % 1;
+
+    const padding = 80;
+    const x = padding + xNorm * (width - 2 * padding);
+    const y = padding + yNorm * (height - 2 * padding);
+
+    return {
+      id: i + 1,
+      x,
+      y,
+      vx: Math.random() - 0.5,
+      vy: Math.random() - 0.5,
+      label,
+      mass: massScale[i],
+      color: ["#C5DAC4", "#FF326C", "#B1B824", "#FFE799", "#FF4747"][i],
+    };
+  });
+}
 
 const FRICTION = 1 - 0.0001;
 const G = 0.5;
 const BOUNCE = 0.7;
 const PADDING = 60;
 
-const AboutMe: NextPage = () => {
+const Orbits: NextPage = () => {
+  const DEFAULT_NODES = createNodes(window.innerWidth, window.innerHeight);
   const [nodes, setNodes] = useState(DEFAULT_NODES);
   const [dragging, setDragging] = useState<{
     id: number;
@@ -119,7 +100,7 @@ const AboutMe: NextPage = () => {
           // Boundaries
           let x = node.x + vx;
           let y = node.y + vy;
-          const radius = 10 + node.mass * 4;
+          const radius = node.mass * 30;
           const minX = PADDING + radius;
           const minY = PADDING + radius;
           const maxX = (boundsRef.current.width || 900) - (PADDING + radius);
@@ -174,14 +155,13 @@ const AboutMe: NextPage = () => {
 
     setDragging({ id: nodeId, offsetX: node!.x - x, offsetY: node!.y - y });
   };
-
-  // Track mouse on document for robust drag
   useEffect(() => {
     if (!dragging) return;
 
     const handleMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
+
       const xClamped = Math.max(
         PADDING,
         Math.min(
@@ -189,6 +169,7 @@ const AboutMe: NextPage = () => {
           (boundsRef.current.width || 900) - PADDING
         )
       );
+
       const yClamped = Math.max(
         PADDING,
         Math.min(
@@ -199,45 +180,22 @@ const AboutMe: NextPage = () => {
 
       const now = performance.now();
 
-      if (lastPos.current && lastTime.current) {
-        const dt = (now - lastTime.current) / 1000; // in seconds
-        const dx = xClamped + dragging.offsetX - lastPos.current.x;
-        const dy = yClamped + dragging.offsetY - lastPos.current.y;
-        const averageMass = 3; // approximate average mass of your nodes
-        const baseDamping = 0.0005;
-        const vx = dx / dt;
-        const vy = dy / dt;
+      // ✔ DURING DRAG: position only (no physics!)
+      setNodes((prev) =>
+        prev.map((node) =>
+          node.id === dragging.id
+            ? {
+                ...node,
+                x: xClamped + dragging.offsetX,
+                y: yClamped + dragging.offsetY,
+                vx: 0, // keep velocity zero during drag
+                vy: 0,
+              }
+            : node
+        )
+      );
 
-        setNodes((prev) =>
-          prev.map((node) =>
-            node.id === dragging.id
-              ? {
-                  ...node,
-                  x: xClamped + dragging.offsetX,
-                  y: yClamped + dragging.offsetY,
-                  vx: (vx * baseDamping * averageMass) / node.mass,
-                  vy: (vy * baseDamping * averageMass) / node.mass,
-                }
-              : node
-          )
-        );
-      } else {
-        // On first move or no last position, just update position without velocity
-        setNodes((prev) =>
-          prev.map((node) =>
-            node.id === dragging.id
-              ? {
-                  ...node,
-                  x: xClamped + dragging.offsetX,
-                  y: yClamped + dragging.offsetY,
-                  vx: 0,
-                  vy: 0,
-                }
-              : node
-          )
-        );
-      }
-
+      // ✔ always track last mouse pos & time for release velocity
       lastPos.current = {
         x: xClamped + dragging.offsetX,
         y: yClamped + dragging.offsetY,
@@ -246,6 +204,31 @@ const AboutMe: NextPage = () => {
     };
 
     const handleUp = (e: MouseEvent) => {
+      // ------------------------------------------
+      // ✔ ON RELEASE — compute proper fling velocity
+      // ------------------------------------------
+      if (lastPos.current && lastTime.current) {
+        const now = performance.now();
+        const dt = (now - lastTime.current) / 1000;
+
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (rect) {
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          const vx = ((x - lastPos.current.x) / dt) * 0.02;
+          const vy = ((y - lastPos.current.y) / dt) * 0.02;
+
+          setNodes((prev) =>
+            prev.map((node) =>
+              node.id === dragging.id
+                ? { ...node, vx: vx / node.mass, vy: vy / node.mass }
+                : node
+            )
+          );
+        }
+      }
+
       lastPos.current = null;
       lastTime.current = null;
       setDragging(null);
@@ -258,6 +241,7 @@ const AboutMe: NextPage = () => {
       document.removeEventListener("mouseup", handleUp);
     };
   }, [dragging]);
+
   // Gravity edge thickness
   const calculateGravitationalPull = (
     node1: { x: number; y: number; mass: number },
@@ -271,7 +255,7 @@ const AboutMe: NextPage = () => {
     <div className="w-full h-screen flex flex-col overflow-hidden">
       <div
         ref={containerRef}
-        className="flex-1 relative cursor-grab overflow-hidden select-none"
+        className="relative h-full w-full cursor-grab overflow-hidden select-none"
       >
         {/* SVG for gravity lines */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none">
@@ -301,18 +285,8 @@ const AboutMe: NextPage = () => {
                     y1={node.y}
                     x2={other.x}
                     y2={other.y}
-                    stroke="hsla(0, 0%, 100%, 1.00)"
-                    strokeWidth={pull * 1.5}
-                    strokeLinecap="round"
-                    opacity="0.5"
-                  />
-                  <line
-                    x1={node.x}
-                    y1={node.y}
-                    x2={other.x}
-                    y2={other.y}
-                    stroke="rgba(0, 0, 0, 0.6)"
-                    strokeWidth={Math.max(0.5, pull)}
+                    stroke="#fff67e"
+                    strokeWidth={Math.sqrt(pull) * 100}
                     strokeLinecap="round"
                   />
                 </g>
@@ -321,7 +295,7 @@ const AboutMe: NextPage = () => {
           )}
         </svg>
         {nodes.map((node) => {
-          const radius = (10 + node.mass) ^ ((3 / 2) * 12);
+          const radius = 10 + node.mass * 12;
           const speed = Math.hypot(node.vx, node.vy);
           return (
             <div
@@ -337,7 +311,7 @@ const AboutMe: NextPage = () => {
                 }px)`,
                 boxShadow:
                   dragging?.id === node.id
-                    ? `0 0 40px rgba(255,255,255,0.8), inset 0 0 20px rgba(255,255,255,0.2), 0 0 60px rgba(100,150,255,0.6)`
+                    ? `0 0 40px #fff67e60, inset 0 0 20px rgba(255,255,255,0.2), 0 0 60px rgba(100,150,255,0.6)`
                     : undefined,
                 fontSize: `${Math.max(10, radius * 0.8)}px`,
                 cursor: "grab",
@@ -346,27 +320,9 @@ const AboutMe: NextPage = () => {
             ></div>
           );
         })}
-        {/* Info panel */}
-        <div className="absolute top-4 right-4 text-slate-300 text-xs font-mono bg-slate-950/80 p-3 rounded backdrop-blur border border-slate-700">
-          <div className="text-slate-400 mb-2 font-bold">System Info</div>
-          <div className="space-y-1">
-            {nodes.map((node) => {
-              const speed = Math.hypot(node.vx, node.vy);
-              return (
-                <div key={node.id} className="text-slate-400">
-                  {node.label}: M={node.mass.toFixed(1)} V={speed.toFixed(2)}
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-2 pt-2 border-t border-slate-700 text-slate-500">
-            Dragging:{" "}
-            {dragging ? nodes.find((n) => n.id === dragging.id)?.label : "None"}
-          </div>
-        </div>
       </div>
     </div>
   );
 };
 
-export default AboutMe;
+export default Orbits;
