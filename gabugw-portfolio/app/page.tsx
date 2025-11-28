@@ -1,6 +1,5 @@
 "use client";
 import Character from "./Character";
-import AboutMe from "./me/AboutMe";
 
 const HomePage = () => {
   return (

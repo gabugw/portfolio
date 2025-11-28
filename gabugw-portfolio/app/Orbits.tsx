@@ -5,10 +5,10 @@ const PHI = 1.618;
 const NODE_COUNT = 5;
 const massScale = [
   1, // base
-  PHI, // 1.618
-  PHI * PHI, // ≈ 2.618
-  PHI ** 3, // ≈ 4.236
-  PHI ** 4, // ≈ 6.854
+  3, // 1.618
+  5, // ≈ 2.618
+  10, // ≈ 4.236
+  15, // ≈ 6.854
 ];
 
 function createNodes(width: number, height: number) {
@@ -19,13 +19,13 @@ function createNodes(width: number, height: number) {
     let yNorm = (t * PHI * PHI) % 1;
 
     // bias upward
-    yNorm = Math.pow(yNorm, 1.5);
+    yNorm = Math.pow(yNorm, 1.8);
 
     // bias outward from center
     const cx = 0.5,
       cy = 0.5;
-    xNorm = cx + (xNorm - cx) * 1.3;
-    yNorm = cy + (yNorm - cy) * 1.3;
+    xNorm = cx + (xNorm - cx) * 1.7;
+    yNorm = cy + (yNorm - cy) * 1.4;
 
     // clamp to [0,1]
     xNorm = Math.min(Math.max(xNorm, 0), 1);
@@ -44,6 +44,13 @@ function createNodes(width: number, height: number) {
       label,
       mass: massScale[i],
       color: ["#C5DAC4", "#FF326C", "#B1B824", "#FFE799", "#FF4747"][i],
+      image: [
+        "assets/orbit-planets/a.png",
+        "assets/orbit-planets/b.png",
+        "assets/orbit-planets/c.png",
+        "assets/orbit-planets/d.png",
+        "assets/orbit-planets/e.png",
+      ][i],
     };
   });
 }
@@ -314,9 +321,9 @@ const Orbits: NextPage = () => {
             <div
               key={node.id}
               onMouseDown={(e) => handleMouseDown(e, node.id)}
-              className={`absolute rounded-full transition-shadow hover:shadow-2xl flex items-center justify-center font-bold text-white`}
+              className={`absolute rounded-full transition-shadow flex items-center justify-center font-bold text-white`}
               style={{
-                background: node.color,
+                // background: `linear-gradient(135deg,${node.color}, ${node.color}0)`,
                 width: `${radius * 2}px`,
                 height: `${radius * 2}px`,
                 transform: `translate(${node.x - radius}px, ${
@@ -324,13 +331,26 @@ const Orbits: NextPage = () => {
                 }px)`,
                 boxShadow:
                   dragging?.id === node.id
-                    ? `0 0 40px #fff67e60, inset 0 0 20px rgba(255,255,255,0.2), 0 0 60px rgba(100,150,255,0.6)`
+                    ? `0 0 40px #fff67e60, inset 0 0 40px #fff67e60, 0 0 60px rgba(100,150,255,0.6), inset 0 0 60px rgba(100,150,255,0.6)`
                     : undefined,
                 fontSize: `${Math.max(10, radius * 0.8)}px`,
                 cursor: "grab",
-                opacity: 0.9,
+                opacity: 0.95,
               }}
-            ></div>
+            >
+              <img
+                className="hover:drop-shadow-[0_0_20px_#fff67e]"
+                src={node.image}
+                alt=""
+                draggable={false}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
           );
         })}
       </div>

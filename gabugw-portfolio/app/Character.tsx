@@ -68,7 +68,10 @@ const Character = () => {
               alt="Character"
               onLoad={() => setCharacterLoaded(true)}
               className="absolute inset-0 w-full h-full object-cover z-10"
-              style={{ pointerEvents: "none" }}
+              style={{
+                pointerEvents: "none",
+                filter: "drop-shadow(5px 6px 4px #13121d96)",
+              }}
             />
 
             <img
@@ -83,7 +86,7 @@ const Character = () => {
             <Orbits />
             <div className="nameplate">
               <b className="gabrielllaUgwonali">
-                <span className="text-100xl">GABRIELLA</span>
+                GABRIELLA
                 <br />
                 UGWONALI
               </b>
