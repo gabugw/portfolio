@@ -5,6 +5,7 @@
   top: 0;
   z-index: 20;
   pointer-events: none;
+  /* backdrop-filter: blur(10px); */
 }
 
 .navbar .container {
@@ -84,7 +85,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: #2a445999;
+    background: #2a4459b0;
     backdrop-filter: blur(10px);
     flex-direction: column;
     padding: 1.5rem 1rem;

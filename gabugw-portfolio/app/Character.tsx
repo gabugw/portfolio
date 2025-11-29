@@ -39,8 +39,8 @@ const Character = () => {
     let frame: number;
 
     const animate = () => {
-      const targetX = (pos.x / size.width - 0.5) * 15;
-      const targetY = (pos.y / size.height - 0.5) * 15;
+      const targetX = (pos.x / size.width - 0.5) * 30;
+      const targetY = (pos.y / size.height - 0.5) * 30 - 100 / size.height;
 
       const t = 0.1;
       setPupil((prev) => ({

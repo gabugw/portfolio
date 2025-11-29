@@ -8,7 +8,7 @@ const massScale = [
   3, // 1.618
   5, // ≈ 2.618
   10, // ≈ 4.236
-  15, // ≈ 6.854
+  16, // ≈ 6.854
 ];
 
 function createNodes(width: number, height: number) {
@@ -19,13 +19,13 @@ function createNodes(width: number, height: number) {
     let yNorm = (t * PHI * PHI) % 1;
 
     // bias upward
-    yNorm = Math.pow(yNorm, 1.8);
+    yNorm = Math.pow(yNorm, 1.2);
 
     // bias outward from center
     const cx = 0.5,
       cy = 0.5;
     xNorm = cx + (xNorm - cx) * 1.7;
-    yNorm = cy + (yNorm - cy) * 1.4;
+    yNorm = cy + (yNorm - cy) * 1.7;
 
     // clamp to [0,1]
     xNorm = Math.min(Math.max(xNorm, 0), 1);
@@ -56,7 +56,7 @@ function createNodes(width: number, height: number) {
 }
 
 const FRICTION = 1 - 0.0001;
-const G = 0.5;
+const G = 0.01;
 const BOUNCE = 0.7;
 const PADDING = 60;
 
@@ -335,7 +335,7 @@ const Orbits: NextPage = () => {
                     : undefined,
                 fontSize: `${Math.max(10, radius * 0.8)}px`,
                 cursor: "grab",
-                opacity: 0.95,
+                opacity: 0.9,
               }}
             >
               <img

@@ -8,11 +8,12 @@ const HomePage = () => {
       <style jsx>{`
         .home-container {
           position: relative;
-          height: 100dvh;
+          // height: 100dvh;
           width: 100vw;
           // background: #a2d4db;
           background: #2a4459;
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
           text-align: center;

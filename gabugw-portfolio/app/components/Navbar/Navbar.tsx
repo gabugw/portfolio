@@ -25,32 +25,34 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="container">
-        {/* <div className="nav-brand">GABUGW</div> */}
+      <div className="navbar-blur-layer">
+        <div className="container">
+          {/* <div className="nav-brand">GABUGW</div> */}
 
-        <button
-          ref={toggleRef}
-          className={`mobile-toggle ${open ? "active" : ""}`}
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          <span className="hamburger"></span>
-          <span className="hamburger"></span>
-          <span className="hamburger"></span>
-        </button>
+          <button
+            ref={toggleRef}
+            className={`mobile-toggle ${open ? "active" : ""}`}
+            onClick={() => setOpen((prev) => !prev)}
+          >
+            <span className="hamburger"></span>
+            <span className="hamburger"></span>
+            <span className="hamburger"></span>
+          </button>
 
-        <ul ref={menuRef} className={`nav-menu ${open ? "active" : ""}`}>
-          <li>{/* <a href="#home">Home</a> */}</li>
-          <li>
-            <Link href="/me">TECH</Link>
-          </li>
-          <li>
-            <Link href="/me">CREATIVE</Link>
-          </li>
-          <li>
-            <Link href="/me">ME</Link>
-          </li>
-          <li>{/* <a href="#video">Video</a> */}</li>
-        </ul>
+          <ul ref={menuRef} className={`nav-menu ${open ? "active" : ""}`}>
+            <li>{/* <a href="#home">Home</a> */}</li>
+            <li>
+              <Link href="/me">TECH</Link>
+            </li>
+            <li>
+              <Link href="/me">CREATIVE</Link>
+            </li>
+            <li>
+              <Link href="/me">ME</Link>
+            </li>
+            <li>{/* <a href="#video">Video</a> */}</li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
