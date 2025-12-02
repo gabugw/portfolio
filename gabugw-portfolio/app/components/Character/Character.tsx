@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import "./Character.css";
-import Orbits from "./Orbits";
+import Orbits from "../../Orbits";
 
 const Character = () => {
   const [pos, setPos] = useState({ x: 0, y: 0 });

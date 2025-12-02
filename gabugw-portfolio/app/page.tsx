@@ -1,10 +1,14 @@
 "use client";
-import Character from "./Character";
+import GithubDisplay from "./components/GithubDisplay";
+import Character from "./components/Character/Character";
 
 const HomePage = () => {
   return (
     <div className={`home-container`}>
       <Character />
+      <GithubDisplay />
+      <Character />
+
       <style jsx>{`
         .home-container {
           position: relative;

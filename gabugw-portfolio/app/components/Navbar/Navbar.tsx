@@ -40,7 +40,9 @@ export default function Navbar() {
           </button>
 
           <ul ref={menuRef} className={`nav-menu ${open ? "active" : ""}`}>
-            <li>{/* <a href="#home">Home</a> */}</li>
+            <li>
+              <Link href="/">HOME</Link>
+            </li>
             <li>
               <Link href="/me">TECH</Link>
             </li>
