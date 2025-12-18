@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "./Character.css";
 import Orbits from "../../Orbits";
 
-const Character = () => {
+const Character = ({ offset }: { offset: number }) => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [pupil, setPupil] = useState({ x: 0, y: 0 });
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -56,43 +56,47 @@ const Character = () => {
   }, [pos, size.width, size.height]);
 
   return (
-    <div
-      onMouseMove={handleMove}
-      className="relative w-screen h-screen overflow-hidden"
-    >
+    <div onMouseMove={handleMove} className="big-container">
       {characterLoaded && eyesLoaded && (
-        <div style={{ pointerEvents: "auto" }}>
-          <div className="absolute left-0 top-0 w-screen h-screen">
-            <img
-              src={characterImg}
-              alt="Character"
-              onLoad={() => setCharacterLoaded(true)}
-              className="absolute inset-0 w-full h-full object-cover z-10"
-              style={{
-                pointerEvents: "none",
-                filter: "drop-shadow(5px 6px 4px #13121d96)",
-              }}
-            />
+        <div
+          style={{
+            pointerEvents: "auto",
+          }}
+        >
+          <Orbits offset={offset} />
 
-            <img
-              src={eyesImg}
-              className="absolute inset-0 w-full h-full object-cover z-9"
-              style={{
-                transform: `translate(${pupil.x}px, ${pupil.y}px)`,
-                pointerEvents: "none",
-              }}
-              alt="Pupils"
-            />
-            <Orbits />
-            <div className="nameplate">
-              <b className="gabrielllaUgwonali">
-                GABRIELLA
-                <br />
-                UGWONALI
-              </b>
-              <div className="gabReeElUhOoGwuhNoLee">
-                /gab-ree-El-uh OO-gwuh-NAH-lee/
-              </div>
+          <img
+            src={characterImg}
+            alt="Character"
+            onLoad={() => setCharacterLoaded(true)}
+            className="absolute inset-0 w-full h-full z-10 object-cover"
+            style={{
+              pointerEvents: "none",
+              filter: "drop-shadow(5px 6px 4px #13121d96)",
+              width: "100%", // full width
+              height: "100%",
+            }}
+          />
+          <img
+            src={eyesImg}
+            className="absolute inset-0 w-full h-full object-cover z-9"
+            style={{
+              transform: `translate(${pupil.x}px, ${pupil.y}px)`,
+              pointerEvents: "none",
+              width: "100%", // full width
+              height: "100%",
+            }}
+            alt="Pupils"
+          />
+
+          <div className="nameplate">
+            <b className="gabrielllaUgwonali">
+              GABRIELLA
+              <br />
+              UGWONALI
+            </b>
+            <div className="gabReeElUhOoGwuhNoLee">
+              /gab-ree-El-uh OO-gwuh-NAH-lee/
             </div>
           </div>
         </div>

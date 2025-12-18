@@ -60,7 +60,11 @@ const G = 0.01;
 const BOUNCE = 0.7;
 const PADDING = 60;
 
-const Orbits: NextPage = () => {
+const Orbits: NextPage<{ offset: number }> = ({
+  offset,
+}: {
+  offset: number;
+}) => {
   const DEFAULT_NODES = createNodes(window.innerWidth, window.innerHeight);
   const [nodes, setNodes] = useState(DEFAULT_NODES);
   const [dragging, setDragging] = useState<{
@@ -272,7 +276,13 @@ const Orbits: NextPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden">
+    <div
+      className="w-full h-screen flex flex-col overflow-hidden"
+      style={{
+        transform: `translateY(${offset * 0.4}px)`,
+        pointerEvents: "none",
+      }}
+    >
       <div
         ref={containerRef}
         className="relative h-full w-full overflow-hidden select-none"

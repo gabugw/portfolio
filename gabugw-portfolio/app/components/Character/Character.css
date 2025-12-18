@@ -34,6 +34,16 @@
   transition: transform 0.3s ease;
 }
 
+.big-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  border-width: 1px;
+  border-color: red;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .nameplate {
     transform: scale(0.75) translateY(-20px);

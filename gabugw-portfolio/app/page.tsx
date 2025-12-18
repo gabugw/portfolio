@@ -1,14 +1,27 @@
 "use client";
 import GithubDisplay from "./components/GithubDisplay";
 import Character from "./components/Character/Character";
+import { useEffect, useState } from "react";
+import ParallaxClouds from "./ParallaxClouds";
 
 const HomePage = () => {
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setOffset(window.pageYOffset); // slower than scroll
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className={`home-container`}>
-      <Character />
+      <Character offset={offset} />
+      <ParallaxClouds offset={offset} />
       <GithubDisplay />
-      <Character />
-
+      <GithubDisplay />
+      <GithubDisplay />
       <style jsx>{`
         .home-container {
           position: relative;
