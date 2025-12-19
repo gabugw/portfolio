@@ -19,6 +19,18 @@
   margin: 0.5rem;
   text-align: left;
 }
+.nameplate-container {
+  z-index: 15;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  display: inline-block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transform-origin: bottom left;
+}
 .nameplate {
   position: absolute;
   bottom: 0px;
@@ -28,7 +40,6 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  z-index: 15;
   padding: 3rem;
   transform-origin: bottom left;
   transition: transform 0.3s ease;

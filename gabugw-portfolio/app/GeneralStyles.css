@@ -1,9 +1,9 @@
 .subsection-title {
   font-size: 2rem;
   line-height: 100%;
-  font-family: Futura;
-  font-weight: 600;
-  font-style: italic;
+  font-family: "futura-100", sans-serif;
+  font-weight: 700;
+  font-style: normal;
   color: #b94619ff;
   flex-shrink: 0;
   z-index: 11;

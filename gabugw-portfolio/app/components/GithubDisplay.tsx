@@ -140,6 +140,10 @@ export default function GithubDisplay() {
           filter: "drop-shadow(5px 6px 4px #13121d96)",
           maxWidth: "90%",
           width: "920px",
+          position: "absolute",
+          bottom: "0",
+          right: "0",
+          transformOrigin: "bottom right",
         }}
       >
         <a

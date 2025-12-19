@@ -100,14 +100,19 @@ const Character = ({ offset }: { offset: number }) => {
             alt="Pupils"
           />
           <Orbits offset={offset} />
-          <div className="nameplate">
-            <b className="gabrielllaUgwonali">
-              GABRIELLA
-              <br />
-              UGWONALI
-            </b>
-            <div className="gabReeElUhOoGwuhNoLee">
-              /gab-ree-El-uh OO-gwuh-NAH-lee/
+          <div
+            className="nameplate-container"
+            style={{ transform: `translateY(${-offset * 0.3}px)` }}
+          >
+            <div className="nameplate">
+              <b className="gabrielllaUgwonali">
+                GABRIELLA
+                <br />
+                UGWONALI
+              </b>
+              <div className="gabReeElUhOoGwuhNoLee">
+                /gab-ree-El-uh OO-gwuh-NAH-lee/
+              </div>
             </div>
           </div>
         </div>

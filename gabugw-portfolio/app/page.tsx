@@ -33,6 +33,9 @@ const LazyCharacter = ({ offset }: { offset: number }) => {
 const HomePage = () => {
   const [offset, setOffset] = useState(0);
 
+  const charShouldRender =
+    offset > -window.innerHeight && offset < window.innerHeight * 3;
+
   useEffect(() => {
     const handleScroll = () => {
       setOffset(window.pageYOffset);
@@ -43,7 +46,7 @@ const HomePage = () => {
 
   return (
     <div className={`home-container`}>
-      <LazyCharacter offset={offset} />
+      <Character offset={offset} />
       <GithubDisplay />
 
       <style jsx>{`
