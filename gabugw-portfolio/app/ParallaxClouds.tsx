@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
-
 function ParallaxClouds({ offset }: { offset: number }) {
-  const opacity = Math.max(0, Math.min(1, offset / 200));
-
   return (
     <div
-      className="relative w-full h-48 z-10"
+      className="absolute w-full h-48 z-8"
       style={{
-        transform: `translateY(${-100 - offset * 1.3}px)`,
-        opacity: opacity,
+        transform: `translateY(${offset * 0.2}px)`,
+        opacity: 0.3,
         pointerEvents: "none",
       }}
     >

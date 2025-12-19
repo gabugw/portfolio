@@ -19,6 +19,7 @@
   background-color: hsl(0 0% 10%);
   color: hsl(0 0% 94%);
   font-size: 13px;
+  z-index: 16;
 
   /* See the `withArrow` setting. */
   .react-activity-calendar__tooltip-arrow {

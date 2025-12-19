@@ -4,6 +4,7 @@ import AboutMe from "../Orbits"; // If you split it; else directly export in pag
 export default function MePage() {
   return (
     <div className={`about-container`}>
+      <AboutMe offset={0} />
       <style jsx>{`
         .home-container {
           display: flex;

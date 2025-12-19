@@ -9,38 +9,52 @@ import Link from "next/link";
 //   value?: number;
 // };
 
-export const formatActivityText = (activity: {
+export type Activity = {
   count: number;
   date: string;
   future?: boolean;
-}): string => {
+};
+
+export type ActivityDayType = "future" | "today" | "yesterday" | "past";
+
+export const getActivityDayType = (activity: Activity): ActivityDayType => {
+  if (activity.future) return "future";
+
   const dateObj = parseISODate(activity.date);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Future days
-  if (activity.future) {
-    return `Upcoming (${formatDate(activity.date)})`;
-  }
+  if (isSameDay(dateObj, today)) return "today";
 
-  // Today
-  if (isSameDay(dateObj, today)) {
-    if (activity.count === 0) return "No activity today";
-    return `${activity.count} ${pluralize(
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  if (isSameDay(dateObj, yesterday)) return "yesterday";
+
+  return "past";
+};
+
+export const formatActivityText = (activity: Activity): string => {
+  const type = getActivityDayType(activity);
+  if (type === "future") return `Upcoming (${formatDate(activity.date)})`;
+  let countText: string;
+  if (activity.count === 0) {
+    countText = "No activity";
+  } else {
+    countText = `${activity.count} ${pluralize(
       activity.count,
       "contribution"
-    )} today`;
+    )}`;
   }
+  const suffix =
+    type === "today"
+      ? "today"
+      : type === "yesterday"
+      ? "yesterday"
+      : `on ${formatDate(activity.date)}`;
 
-  // Past days
-  if (activity.count === 0) {
-    return `No activity on ${formatDate(activity.date)}`;
-  }
-
-  return `${activity.count} ${pluralize(
-    activity.count,
-    "contribution"
-  )} on ${formatDate(activity.date)}`;
+  return `${countText} ${suffix}`;
 };
 
 // ---- Date helpers (timezone-safe) ----
@@ -116,7 +130,7 @@ export default function GithubDisplay() {
   };
 
   return (
-    <Link href="https://github.com/gabugw">
+    <div className="relativex w-screen h-screen z-0">
       <div
         style={{
           margin: "20px 20px",
@@ -124,33 +138,40 @@ export default function GithubDisplay() {
           padding: "30px",
           borderRadius: "8px",
           filter: "drop-shadow(5px 6px 4px #13121d96)",
-          maxWidth: "100%",
+          maxWidth: "90%",
+          width: "920px",
         }}
       >
-        <div className="subsection-title"> My Github Activity</div>
-        <GitHubCalendar
-          username="gabugw"
-          style={{ fontFamily: "Futura" }}
-          theme={{
-            light: ["#1f3540", "#b94619ff"],
-            dark: ["#1f3540", "#b94619ff"],
-          }}
-          transformData={selectLastMonths}
-          tooltips={{
-            activity: {
-              text: (activity) => formatActivityText(activity),
-              placement: "right",
-              offset: 6,
-              hoverRestMs: 300,
-              transitionStyles: {
-                duration: 100,
-                common: { fontFamily: "Futura" },
+        <a
+          href="https://github.com/gabugw"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="subsection-title"> My Github Activity</div>
+          <GitHubCalendar
+            username="gabugw"
+            style={{ fontFamily: "Futura" }}
+            theme={{
+              light: ["#1f3540", "#b94619ff"],
+              dark: ["#1f3540", "#b94619ff"],
+            }}
+            transformData={selectLastMonths}
+            tooltips={{
+              activity: {
+                text: (activity) => formatActivityText(activity),
+                placement: "right",
+                offset: 6,
+                hoverRestMs: 300,
+                transitionStyles: {
+                  duration: 100,
+                  common: { fontFamily: "Futura" },
+                },
+                withArrow: true,
               },
-              withArrow: true,
-            },
-          }}
-        />
+            }}
+          />
+        </a>
       </div>
-    </Link>
+    </div>
   );
 }

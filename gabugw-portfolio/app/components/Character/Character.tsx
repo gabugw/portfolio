@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import "./Character.css";
 import Orbits from "../../Orbits";
+import ParallaxClouds from "@/app/ParallaxClouds";
 
 const Character = ({ offset }: { offset: number }) => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -56,14 +57,24 @@ const Character = ({ offset }: { offset: number }) => {
   }, [pos, size.width, size.height]);
 
   return (
-    <div onMouseMove={handleMove} className="big-container">
+    <div
+      onMouseMove={handleMove}
+      className="big-container"
+      style={{ transform: `translateY(${offset * 0.3}px)` }}
+    >
       {characterLoaded && eyesLoaded && (
         <div
           style={{
             pointerEvents: "auto",
           }}
         >
-          <Orbits offset={offset} />
+          {/* <img
+            src="/assets/cloud.png"
+            className="absolute w-full object-cover pointer-events-none opacity-30"
+            alt="Clouds"
+          /> */}
+
+          <ParallaxClouds offset={offset} />
 
           <img
             src={characterImg}
@@ -88,7 +99,7 @@ const Character = ({ offset }: { offset: number }) => {
             }}
             alt="Pupils"
           />
-
+          <Orbits offset={offset} />
           <div className="nameplate">
             <b className="gabrielllaUgwonali">
               GABRIELLA

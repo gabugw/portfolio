@@ -28,7 +28,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  z-index: 10;
+  z-index: 15;
   padding: 3rem;
   transform-origin: bottom left;
   transition: transform 0.3s ease;
@@ -38,8 +38,6 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  border-width: 1px;
-  border-color: red;
   pointer-events: auto;
   overflow: hidden;
 }

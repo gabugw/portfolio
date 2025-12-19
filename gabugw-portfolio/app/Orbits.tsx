@@ -58,7 +58,7 @@ function createNodes(width: number, height: number) {
 const FRICTION = 1 - 0.0001;
 const G = 0.01;
 const BOUNCE = 0.7;
-const PADDING = 60;
+const PADDING = 0;
 
 const Orbits: NextPage<{ offset: number }> = ({
   offset,
@@ -105,19 +105,25 @@ const Orbits: NextPage<{ offset: number }> = ({
           let { vx, vy } = node;
           vx *= FRICTION;
           vy *= FRICTION;
+          const REPULSION = 0.4;
 
-          // Gravity
           prev.forEach((other) => {
             if (other.id !== node.id) {
-              let dx = other.x - node.x;
-              let dy = other.y - node.y;
+              const dx = other.x - node.x;
+              const dy = other.y - node.y;
               let dist = Math.hypot(dx, dy);
-              if (dist < 5) dist = 5; // Avoid divide by zero/blowup
-              // F = G * m1 * m2 / r^2
+              if (dist < 5) dist = 5;
+
+              // Gravity
               let force = (G * node.mass * other.mass) / (dist * dist);
               let angle = Math.atan2(dy, dx);
               vx += (Math.cos(angle) * force) / node.mass;
               vy += (Math.sin(angle) * force) / node.mass;
+
+              // **Repulsion**
+              const rep = (REPULSION * node.mass * other.mass) / (dist * dist);
+              vx -= (Math.cos(angle) * rep) / node.mass;
+              vy -= (Math.sin(angle) * rep) / node.mass;
             }
           });
 
@@ -125,10 +131,12 @@ const Orbits: NextPage<{ offset: number }> = ({
           let x = node.x + vx;
           let y = node.y + vy;
           const radius = node.mass * 30;
-          const minX = PADDING + radius;
-          const minY = PADDING + radius;
-          const maxX = (boundsRef.current.width || 900) - (PADDING + radius);
-          const maxY = (boundsRef.current.height || 600) - (PADDING + radius);
+          const minX = PADDING + radius * 0.4;
+          const minY = PADDING + radius * 0.4;
+          const maxX =
+            (boundsRef.current.width || 900) - PADDING - radius * 0.4;
+          const maxY =
+            (boundsRef.current.height || 600) - PADDING - radius * 0.4;
 
           // Clamp edge, bounce
           if (x < minX) {
@@ -266,7 +274,7 @@ const Orbits: NextPage<{ offset: number }> = ({
     };
   }, [dragging]);
 
-  // Gravity edge thickness
+  // Gravity edge thxickness
   const calculateGravitationalPull = (
     node1: { x: number; y: number; mass: number },
     node2: { x: number; y: number; mass: number }
@@ -280,7 +288,7 @@ const Orbits: NextPage<{ offset: number }> = ({
       className="w-full h-screen flex flex-col overflow-hidden"
       style={{
         transform: `translateY(${offset * 0.4}px)`,
-        pointerEvents: "none",
+        pointerEvents: "auto",
       }}
     >
       <div

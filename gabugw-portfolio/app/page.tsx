@@ -1,15 +1,41 @@
 "use client";
 import GithubDisplay from "./components/GithubDisplay";
 import Character from "./components/Character/Character";
-import { useEffect, useState } from "react";
-import ParallaxClouds from "./ParallaxClouds";
+import { useEffect, useRef, useState } from "react";
+
+const LazyCharacter = ({ offset }: { offset: number }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0, rootMargin: "150% 0px 150% 0px" }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, []);
+
+  return (
+    <div ref={ref}>
+      {isVisible ? (
+        <Character offset={offset} />
+      ) : (
+        <div className=" w-screen h-screen"></div>
+      )}
+    </div>
+  );
+};
 
 const HomePage = () => {
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setOffset(window.pageYOffset); // slower than scroll
+      setOffset(window.pageYOffset);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -17,11 +43,9 @@ const HomePage = () => {
 
   return (
     <div className={`home-container`}>
-      <Character offset={offset} />
-      <ParallaxClouds offset={offset} />
+      <LazyCharacter offset={offset} />
       <GithubDisplay />
-      <GithubDisplay />
-      <GithubDisplay />
+
       <style jsx>{`
         .home-container {
           position: relative;
